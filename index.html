@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bun Fetch Example</title>
+  <title>Exploring Bun!</title>
 </head>
 <body>
   <h1>Bun!</h1>
   <p id="user"></p>
+  <p id="userdata"></p>
 
   <script>
     async function fetchUser() {
@@ -23,7 +24,23 @@
       }
     }
 
+    async function fetchUserData() {
+        try{
+            const response = await fetch("/userdata");
+            if(!response.ok) throw new Error("Error in network unable to fetch the data");
+
+            const data = await response.json();
+            document.getElementById("userdata").innerHTML = data
+            .map(user => `<li>${user.name} — ${user.email}</li>`)
+            .join("");
+        }catch(error){
+            console.log("Error in fetching the data", error);
+            document.getElementById("userdata").textContent = "Error loading user data";
+        }
+    }
+
     fetchUser();
+    fetchUserData();
   </script>
 </body>
 </html>
